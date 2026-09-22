@@ -1,6 +1,7 @@
 # Client ABC Pharmacy - Single Page Application & Web API
 
 A full-stack Single Page Application (SPA) built for **Client ABC Pharmacy** to manage medicine inventory and sales records.
+Check Live App here : https://rishi3957.github.io/myconsoleapp/
 
 ---
 
