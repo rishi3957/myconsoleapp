@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client ABC Pharmacy - Medicine Management SPA</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Header & Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-notes-medical"></i>
+        </div>
+        <div class="brand-info">
+          <h1>Client ABC Pharmacy</h1>
+          <span class="brand-subtitle">Medicine Management & Sales System</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="btn-sales-history" class="btn btn-outline">
+          <i class="fa-solid fa-receipt"></i> Sales Log (<span id="sales-count">0</span>)
+        </button>
+        <button id="btn-open-add-modal" class="btn btn-primary">
+          <i class="fa-solid fa-plus"></i> Add Medicine
+        </button>
+      </div>
+    </header>
+
+    <!-- Top KPI Stats Bar -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon icon-blue">
+          <i class="fa-solid fa-pills"></i>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value" id="kpi-total">0</span>
+          <span class="kpi-label">Total Medicines</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon icon-yellow">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value" id="kpi-low-stock">0</span>
+          <span class="kpi-label">Low Stock (< 10 units)</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon icon-red">
+          <i class="fa-solid fa-calendar-xmark"></i>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value" id="kpi-expiring">0</span>
+          <span class="kpi-label">Expiring Soon (< 30 days)</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon icon-green">
+          <i class="fa-solid fa-cash-register"></i>
+        </div>
+        <div class="kpi-data">
+          <span class="kpi-value" id="kpi-revenue">$0.00</span>
+          <span class="kpi-label">Total Sales Revenue</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- Filter Legend & Search Controls -->
+      <div class="controls-card">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="search-input" placeholder="Search by medicine name or brand..." autocomplete="off">
+          <button id="clear-search" class="clear-btn" style="display: none;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="filter-controls">
+          <label class="filter-label"><i class="fa-solid fa-filter"></i> Filter:</label>
+          <div class="pill-filters">
+            <button class="pill-btn active" data-filter="all">All</button>
+            <button class="pill-btn pill-expiring" data-filter="expiring">
+              <span class="dot dot-red"></span> Expiring (< 30 days)
+            </button>
+            <button class="pill-btn pill-low-stock" data-filter="low-stock">
+              <span class="dot dot-yellow"></span> Low Stock (< 10)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Color Legend Indicator -->
+      <div class="legend-bar">
+        <span class="legend-title"><i class="fa-solid fa-circle-info"></i> Color Guide:</span>
+        <span class="legend-badge badge-red">
+          <span class="badge-dot"></span> Red Background = Expiry &lt; 30 Days
+        </span>
+        <span class="legend-badge badge-yellow">
+          <span class="badge-dot"></span> Yellow Background = Stock Quantity &lt; 10
+        </span>
+        <span class="legend-badge badge-combined">
+          <span class="badge-dot"></span> Striped Red/Yellow = Expiring & Low Stock
+        </span>
+      </div>
+
+      <!-- Medicine Grid Display Table (Excludes Notes as required) -->
+      <div class="table-container">
+        <table class="medicine-table" id="medicine-table">
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Brand</th>
+              <th>Expiry Date</th>
+              <th>Quantity in Stock</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="medicine-tbody">
+            <!-- Dynamic Rows rendered via app.js -->
+          </tbody>
+        </table>
+        
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <i class="fa-solid fa-box-open empty-icon"></i>
+          <h3>No Medicines Found</h3>
+          <p id="empty-message">No inventory records match your criteria.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal 1: Add / Edit Medicine -->
+    <div class="modal-backdrop" id="modal-add-medicine">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="modal-title"><i class="fa-solid fa-notes-medical"></i> Add New Medicine</h2>
+          <button class="modal-close" data-close="modal-add-medicine">&times;</button>
+        </div>
+        <form id="form-medicine">
+          <input type="hidden" id="med-id">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="med-name">Full Name of Medicine <span class="required">*</span></label>
+              <input type="text" id="med-name" required placeholder="e.g. Paracetamol Extra 500mg">
+            </div>
+
+            <div class="form-group">
+              <label for="med-brand">Brand <span class="required">*</span></label>
+              <input type="text" id="med-brand" required placeholder="e.g. HealthPharma">
+            </div>
+
+            <div class="form-group">
+              <label for="med-expiry">Expiry Date <span class="required">*</span></label>
+              <input type="date" id="med-expiry" required>
+            </div>
+
+            <div class="form-group">
+              <label for="med-quantity">Quantity in Stock <span class="required">*</span></label>
+              <input type="number" id="med-quantity" min="0" required placeholder="e.g. 50">
+            </div>
+
+            <div class="form-group">
+              <label for="med-price">Price ($ or ₹) <span class="required">*</span> <small>(2 decimal places)</small></label>
+              <input type="number" id="med-price" step="0.01" min="0" required placeholder="e.g. 12.50">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="med-notes">Notes / Instructions</label>
+              <textarea id="med-notes" rows="3" placeholder="Enter optional administration notes, batch numbers, storage instructions..."></textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close="modal-add-medicine">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-save-med">
+              <i class="fa-solid fa-floppy-disk"></i> Save Medicine
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 2: Sell Medicine Record Mechanism -->
+    <div class="modal-backdrop" id="modal-sell-medicine">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-cart-shopping"></i> Sell Medicine</h2>
+          <button class="modal-close" data-close="modal-sell-medicine">&times;</button>
+        </div>
+        <form id="form-sell">
+          <input type="hidden" id="sell-med-id">
+          
+          <div class="sell-summary-card">
+            <h3 id="sell-med-name">Medicine Name</h3>
+            <div class="sell-meta">
+              <span>Brand: <strong id="sell-med-brand">-</strong></span>
+              <span>Available Stock: <strong id="sell-med-stock">0</strong></span>
+            </div>
+            <div class="sell-price-tag">
+              Unit Price: $<span id="sell-unit-price">0.00</span>
+            </div>
+          </div>
+
+          <div class="form-group margin-top">
+            <label for="sell-quantity">Quantity to Sell <span class="required">*</span></label>
+            <input type="number" id="sell-quantity" min="1" value="1" required>
+            <span class="field-error" id="sell-qty-error"></span>
+          </div>
+
+          <div class="total-calculation-box">
+            <span>Total Payable Amount:</span>
+            <strong class="total-amount">$<span id="sell-total-price">0.00</span></strong>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-close="modal-sell-medicine">Cancel</button>
+            <button type="submit" class="btn btn-success" id="btn-confirm-sell">
+              <i class="fa-solid fa-check"></i> Complete Sale
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 3: View Medicine Notes Detail -->
+    <div class="modal-backdrop" id="modal-view-notes">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-file-medical"></i> Medicine Notes</h2>
+          <button class="modal-close" data-close="modal-view-notes">&times;</button>
+        </div>
+        <div class="notes-content-body">
+          <h3 id="notes-med-title">Medicine Name</h3>
+          <p class="notes-brand" id="notes-med-brand">Brand</p>
+          <div class="notes-box">
+            <i class="fa-solid fa-quote-left quote-icon"></i>
+            <p id="notes-text">No notes provided for this medicine.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close="modal-view-notes">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 4: Sales History Drawer -->
+    <div class="modal-backdrop" id="modal-sales-history">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-receipt"></i> Medicine Sales History Records</h2>
+          <button class="modal-close" data-close="modal-sales-history">&times;</button>
+        </div>
+        <div class="sales-history-body">
+          <table class="sales-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Medicine Sold</th>
+                <th>Brand</th>
+                <th>Qty Sold</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+              </tr>
+            </thead>
+            <tbody id="sales-tbody">
+              <!-- Rendered via app.js -->
+            </tbody>
+          </table>
+          <div id="sales-empty" class="empty-state" style="display:none;">
+            <i class="fa-solid fa-receipt empty-icon"></i>
+            <p>No sale records found yet.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close="modal-sales-history">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
