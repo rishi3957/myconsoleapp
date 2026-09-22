@@ -1,0 +1,62 @@
+[
+  {
+    "id": "med-101",
+    "fullName": "Paracetamol Extra 500mg",
+    "notes": "Fast acting pain relief and fever reducer. Take after meals.",
+    "expiryDate": "2026-10-05T00:00:00Z",
+    "quantity": 45,
+    "price": 4.5,
+    "brand": "HealthPharma",
+    "createdAt": "2026-09-10T12:00:00Z"
+  },
+  {
+    "id": "med-102",
+    "fullName": "Amoxicillin Trihydrate 250mg",
+    "notes": "Broad spectrum antibiotic capsules. Complete full course as prescribed.",
+    "expiryDate": "2027-03-20T00:00:00Z",
+    "quantity": 8,
+    "price": 14.99,
+    "brand": "MedLife Biocare",
+    "createdAt": "2026-09-15T10:00:00Z"
+  },
+  {
+    "id": "med-103",
+    "fullName": "Cetirizine Hydrochloride 10mg",
+    "notes": "Non-drowsy antihistamine for seasonal allergies and hay fever.",
+    "expiryDate": "2026-10-02T00:00:00Z",
+    "quantity": 5,
+    "price": 6.25,
+    "brand": "SunCure Labs",
+    "createdAt": "2026-09-01T08:00:00Z"
+  },
+  {
+    "id": "med-104",
+    "fullName": "Metformin HCl 500mg Prolonged Release",
+    "notes": "Oral anti-diabetic medication for managing Type 2 Diabetes.",
+    "expiryDate": "2027-05-15T00:00:00Z",
+    "quantity": 120,
+    "price": 18.75,
+    "brand": "GlycaCare",
+    "createdAt": "2026-08-20T14:00:00Z"
+  },
+  {
+    "id": "med-105",
+    "fullName": "Ibuprofen 400mg Softgel Capsules",
+    "notes": "Anti-inflammatory painkiller for joint and muscular ache.",
+    "expiryDate": "2026-10-12T00:00:00Z",
+    "quantity": 60,
+    "price": 8.99,
+    "brand": "HealthPharma",
+    "createdAt": "2026-09-18T16:00:00Z"
+  },
+  {
+    "id": "med-106",
+    "fullName": "Omeprazole Gastro-Resistant 20mg",
+    "notes": "Proton pump inhibitor for heartburn and acid reflux relief.",
+    "expiryDate": "2027-09-20T00:00:00Z",
+    "quantity": 4,
+    "price": 11.5,
+    "brand": "AstraMed",
+    "createdAt": "2026-09-19T09:00:00Z"
+  }
+]

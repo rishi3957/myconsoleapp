@@ -1,0 +1,22 @@
+[
+  {
+    "id": "sale-501",
+    "medicineId": "med-101",
+    "medicineName": "Paracetamol Extra 500mg",
+    "brand": "HealthPharma",
+    "quantitySold": 5,
+    "unitPrice": 4.5,
+    "totalPrice": 22.5,
+    "saleDate": "2026-09-20T20:00:00Z"
+  },
+  {
+    "id": "sale-502",
+    "medicineId": "med-104",
+    "medicineName": "Metformin HCl 500mg Prolonged Release",
+    "brand": "GlycaCare",
+    "quantitySold": 2,
+    "unitPrice": 18.75,
+    "totalPrice": 37.5,
+    "saleDate": "2026-09-20T22:00:00Z"
+  }
+]
